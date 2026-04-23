@@ -1,22 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import type { Painting } from "@/data/paintings";
 
-type Props = {
-  paintings: Painting[];
-};
+type Props = { paintings: Painting[] };
 
 export function PaintingWheel({ paintings }: Props) {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const [rotation, setRotation] = useState(0);
-  const [size, setSize] = useState({ w: 1200, h: 800 });
+  const sectionRef = useRef<HTMLElement>(null);
+  const [progress, setProgress] = useState(0); // 0..1 within section
+  const [vw, setVw] = useState(1200);
 
   useEffect(() => {
-    const updateSize = () => {
-      setSize({ w: window.innerWidth, h: window.innerHeight });
-    };
-    updateSize();
-    window.addEventListener("resize", updateSize);
-    return () => window.removeEventListener("resize", updateSize);
+    const onResize = () => setVw(window.innerWidth);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, []);
 
   useEffect(() => {
@@ -24,8 +20,12 @@ export function PaintingWheel({ paintings }: Props) {
     const onScroll = () => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
-        // Rotate clockwise based on scrollY. 0.15 deg per pixel feels nice.
-        setRotation(window.scrollY * 0.15);
+        const el = sectionRef.current;
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const total = rect.height - window.innerHeight;
+        const p = Math.min(1, Math.max(0, -rect.top / Math.max(1, total)));
+        setProgress(p);
       });
     };
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -36,83 +36,138 @@ export function PaintingWheel({ paintings }: Props) {
     };
   }, []);
 
-  // Wheel sized larger than viewport so only the top arc is visible.
-  const wheelDiameter = Math.max(size.w * 1.6, 1600);
+  const N = paintings.length;
+  // The wheel rotates clockwise as you scroll. One full turn over the pinned section.
+  const rotation = progress * 360;
+
+  // Wheel geometry
+  const wheelDiameter = Math.max(vw * 1.9, 1700);
   const radius = wheelDiameter / 2;
-  const tileSize = Math.max(110, Math.min(180, size.w * 0.11));
+  const tileW = Math.max(140, Math.min(230, vw * 0.14));
+  const tileH = tileW * 1.55;
+
+  // Determine which painting sits closest to the top (12 o'clock) — that's the "focused" one.
+  // Each tile is at angle (i * 360/N) + rotation. The tile at top has total angle ≡ 0 mod 360.
+  const step = 360 / N;
+  // We want i such that (i*step + rotation) mod 360 ≈ 0  => i ≈ (-rotation/step) mod N
+  const focusedIndex =
+    ((Math.round(-rotation / step) % N) + N) % N;
+  const focused = paintings[focusedIndex];
 
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-background"
-      style={{ height: "100vh", minHeight: 700 }}
+      className="relative bg-background"
+      style={{ height: `${N * 60}vh` }}
     >
-      {/* Wheel container — anchored so its center sits well below the visible area,
-          leaving only the upper arc inside the viewport. */}
-      <div
-        className="absolute left-1/2"
-        style={{
-          width: wheelDiameter,
-          height: wheelDiameter,
-          top: "55%",
-          transform: `translateX(-50%) rotate(${rotation}deg)`,
-          transition: "transform 0.05s linear",
-          willChange: "transform",
-        }}
-      >
-        {paintings.map((p, i) => {
-          const angle = (360 / paintings.length) * i;
-          const rad = (angle * Math.PI) / 180;
-          // Position around the circle (top = -90deg offset)
-          const x = Math.cos(rad - Math.PI / 2) * radius;
-          const y = Math.sin(rad - Math.PI / 2) * radius;
+      <div className="sticky top-0 h-screen w-full overflow-hidden">
+        {/* Title */}
+        <div className="absolute inset-x-0 top-0 z-20 pt-8 md:pt-12 text-center px-6 pointer-events-none">
+          <h1
+            className="font-serif italic text-5xl md:text-7xl"
+            style={{ color: "var(--gold)", letterSpacing: "-0.01em" }}
+          >
+            Échos de l'Art
+          </h1>
+          <p className="mt-2 text-[0.7rem] md:text-xs tracking-[0.35em] uppercase text-muted-foreground">
+            A Journey Through European Masterpieces
+          </p>
+        </div>
 
-          return (
-            <div
-              key={p.title}
-              className="absolute"
-              style={{
-                left: "50%",
-                top: "50%",
-                width: tileSize,
-                height: tileSize * 1.25,
-                transform: `translate(${x}px, ${y}px) translate(-50%, -50%) rotate(${-rotation + angle}deg)`,
-                willChange: "transform",
-              }}
-            >
-              <div
-                className="w-full h-full overflow-hidden bg-card shadow-[0_20px_40px_-15px_rgba(0,0,0,0.25)] ring-1 ring-black/5"
-                style={{ borderRadius: "14px" }}
-              >
-                <img
-                  src={p.image}
-                  alt={p.title}
-                  loading="lazy"
-                  className="w-full h-full object-cover"
-                  draggable={false}
-                />
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Center content overlay */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full px-6 text-center pointer-events-none">
-        <h1 className="text-4xl md:text-6xl font-serif text-foreground max-w-3xl leading-tight">
-          A Living Gallery of Masterpieces
-        </h1>
-        <p className="mt-6 text-base md:text-lg text-muted-foreground max-w-xl">
-          Scroll to turn the wheel. Discover thirty timeless works of European art —
-          from the Renaissance to the dawn of modernism.
-        </p>
-        <a
-          href="#gallery"
-          className="pointer-events-auto mt-10 inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3 text-sm font-medium text-primary-foreground transition-transform hover:scale-105"
+        {/* Rotating wheel */}
+        <div
+          className="absolute left-1/2"
+          style={{
+            width: wheelDiameter,
+            height: wheelDiameter,
+            top: "62%",
+            transform: `translateX(-50%) rotate(${rotation}deg)`,
+            willChange: "transform",
+            transition: "transform 0.08s linear",
+          }}
         >
-          Explore the Collection
-          <span aria-hidden>→</span>
-        </a>
+          {paintings.map((p, i) => {
+            const angle = step * i; // degrees from 12 o'clock
+            const rad = (angle * Math.PI) / 180;
+            const x = Math.sin(rad) * radius;
+            const y = -Math.cos(rad) * radius;
+
+            return (
+              <div
+                key={p.title}
+                className="absolute"
+                style={{
+                  left: "50%",
+                  top: "50%",
+                  width: tileW,
+                  height: tileH,
+                  // Card faces outward (radially), rotated by angle. Counter-rotate the wheel
+                  // rotation so the card itself stays readable when at the top, but here we want
+                  // the cards to fan with the wheel, like the reference — so we ONLY rotate by
+                  // the slot angle, not by -rotation.
+                  transform: `translate(${x}px, ${y}px) translate(-50%, -50%) rotate(${angle}deg)`,
+                  willChange: "transform",
+                }}
+              >
+                <div
+                  className="w-full h-full overflow-hidden bg-card ring-1 ring-black/10"
+                  style={{
+                    borderRadius: 14,
+                    boxShadow:
+                      "0 30px 60px -25px rgba(0,0,0,0.45), 0 10px 25px -10px rgba(0,0,0,0.25)",
+                  }}
+                >
+                  <img
+                    src={p.image}
+                    alt={p.title}
+                    loading="lazy"
+                    draggable={false}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Focused painting info card */}
+        <div className="absolute inset-x-0 bottom-0 z-20 flex flex-col items-center pb-10 md:pb-14 px-6">
+          <div
+            key={focused.title}
+            className="w-full max-w-2xl rounded-2xl bg-card/95 backdrop-blur px-8 py-7 text-center ring-1 ring-border"
+            style={{
+              boxShadow: "0 30px 70px -30px rgba(0,0,0,0.35)",
+              animation: "fadeUp 0.4s ease-out",
+            }}
+          >
+            <h2
+              className="font-serif text-3xl md:text-4xl"
+              style={{ color: "var(--gold)" }}
+            >
+              {focused.title}
+            </h2>
+            <p className="mt-2 text-xs md:text-sm tracking-[0.3em] uppercase text-muted-foreground">
+              {focused.artist}
+            </p>
+            <p className="mt-4 italic text-foreground/80 font-serif text-lg leading-snug">
+              {focused.description}
+            </p>
+          </div>
+
+          <div className="mt-5 text-center text-xs text-muted-foreground">
+            <p>Scroll to Rotate</p>
+            <div className="mx-auto mt-2 h-7 w-4 rounded-full border border-muted-foreground/40 flex items-start justify-center pt-1">
+              <span className="block h-1.5 w-0.5 bg-muted-foreground/60 rounded-full animate-bounce" />
+            </div>
+          </div>
+        </div>
+
+        <style>{`
+          @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+        `}</style>
       </div>
     </section>
   );
