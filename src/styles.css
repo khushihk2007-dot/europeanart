@@ -56,6 +56,27 @@
   --ring: oklch(0.6 0.04 70);
 }
 
+.dark {
+  --background: oklch(0.16 0.012 60);
+  --foreground: oklch(0.95 0.01 80);
+  --card: oklch(0.21 0.014 60);
+  --card-foreground: oklch(0.95 0.01 80);
+  --popover: oklch(0.21 0.014 60);
+  --popover-foreground: oklch(0.95 0.01 80);
+  --primary: oklch(0.95 0.01 80);
+  --primary-foreground: oklch(0.18 0.02 60);
+  --secondary: oklch(0.26 0.014 60);
+  --secondary-foreground: oklch(0.95 0.01 80);
+  --muted: oklch(0.26 0.014 60);
+  --muted-foreground: oklch(0.7 0.02 75);
+  --accent: oklch(0.72 0.14 75);
+  --accent-foreground: oklch(0.18 0.02 60);
+  --gold: oklch(0.78 0.14 80);
+  --border: oklch(0.32 0.014 60);
+  --input: oklch(0.32 0.014 60);
+  --ring: oklch(0.7 0.04 70);
+}
+
 @layer base {
   * {
     border-color: var(--color-border);

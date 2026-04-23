@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { PaintingWheel } from "@/components/PaintingWheel";
-import { paintings } from "@/data/paintings";
+import { Lightbox } from "@/components/Lightbox";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { paintings, type Painting } from "@/data/paintings";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -23,8 +26,10 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const [zoomed, setZoomed] = useState<Painting | null>(null);
   return (
     <main className="bg-background text-foreground">
+      <ThemeToggle />
       <PaintingWheel paintings={paintings} />
 
       <section id="gallery" className="px-6 md:px-10 py-24 max-w-7xl mx-auto">
@@ -50,14 +55,18 @@ function Index() {
               key={p.title}
               className="group flex flex-col rounded-2xl bg-card overflow-hidden ring-1 ring-border transition-all hover:shadow-[0_25px_60px_-30px_rgba(0,0,0,0.4)] hover:-translate-y-1"
             >
-              <div className="aspect-[4/5] overflow-hidden bg-muted">
+              <button
+                type="button"
+                onClick={() => setZoomed(p)}
+                className="aspect-[4/5] overflow-hidden bg-muted block w-full cursor-pointer"
+              >
                 <img
                   src={p.image}
                   alt={`${p.title} by ${p.artist}`}
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-              </div>
+              </button>
               <div className="p-6 text-center">
                 <h3
                   className="font-serif text-2xl"
@@ -80,6 +89,7 @@ function Index() {
       <footer className="border-t border-border py-10 text-center text-sm text-muted-foreground">
         Images courtesy of Wikimedia Commons · Public domain works of European art.
       </footer>
+      <Lightbox painting={zoomed} onClose={() => setZoomed(null)} />
     </main>
   );
 }
