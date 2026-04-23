@@ -69,7 +69,7 @@ export const paintings: Painting[] = [
     year: "1890",
     description:
       "An academic portrait of a young woman admiring herself in the mirror, embodying Belle Époque elegance.",
-    image: wm("6/6e/Auguste_Toulmouche_Vanity.jpg"),
+    image: wm("Auguste_toulmouche-vanity.jpg"),
   },
   {
     title: "The Starry Night",
@@ -157,7 +157,7 @@ export const paintings: Painting[] = [
     year: "1814",
     description:
       "An elongated reclining nude blending Neoclassical line with sensuous Orientalist fantasy.",
-    image: wm("b/b6/Grande_Odalisque.jpg"),
+    image: wm("d/df/La_grande_odalisque_-_Jean-Auguste_Dominique_Ingres_-_Mus%C3%A9e_du_Louvre_Peintures_RF_1158.jpg"),
   },
   {
     title: "The Card Players",
@@ -165,7 +165,7 @@ export const paintings: Painting[] = [
     year: "1890–95",
     description:
       "A quiet scene of Provençal peasants at cards — a cornerstone of post-Impressionist composition.",
-    image: wm("1/1b/Paul_C%C3%A9zanne%2C_The_Card_Players%2C_1892-95%2C_Courtauld_Institute_of_Art%2C_London.jpg"),
+    image: wm("6/69/Les_Joueurs_de_cartes%2C_par_Paul_C%C3%A9zanne.jpg"),
   },
   {
     title: "Bal du moulin de la Galette",
@@ -269,6 +269,6 @@ export const paintings: Painting[] = [
     year: "1767",
     description:
       "A frothy Rococo flirtation in a sunlit garden — silk, secrets and a daring kicked-off slipper.",
-    image: wm("3/3f/Jean-Honor%C3%A9_Fragonard_-_The_Swing_-_WGA08329.jpg"),
+    image: wm("8/83/The_Swing_%28P430%29.jpg"),
   },
 ];
