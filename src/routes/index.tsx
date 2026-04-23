@@ -5,17 +5,17 @@ import { paintings } from "@/data/paintings";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Maestros — A Wheel of European Masterpieces" },
+      { title: "Échos de l'Art — A Journey Through European Masterpieces" },
       {
         name: "description",
         content:
-          "Scroll through a rotating wheel of 30+ legendary European paintings, from the Renaissance to Post-Impressionism, with notes on each work and its painter.",
+          "Scroll through a rotating wheel of 30+ legendary European paintings, with notes on each work and its painter.",
       },
-      { property: "og:title", content: "Maestros — A Wheel of European Masterpieces" },
+      { property: "og:title", content: "Échos de l'Art" },
       {
         property: "og:description",
         content:
-          "An interactive scroll-driven gallery of European art masterpieces with painter and painting notes.",
+          "An interactive scroll-driven gallery of European masterpieces.",
       },
     ],
   }),
@@ -28,16 +28,19 @@ function Index() {
       <PaintingWheel paintings={paintings} />
 
       <section id="gallery" className="px-6 md:px-10 py-24 max-w-7xl mx-auto">
-        <header className="max-w-2xl mb-16">
-          <p className="text-sm uppercase tracking-[0.25em] text-muted-foreground mb-4">
+        <header className="max-w-2xl mb-16 text-center mx-auto">
+          <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground mb-4">
             The Collection
           </p>
-          <h2 className="text-3xl md:text-5xl font-serif leading-tight">
+          <h2
+            className="font-serif italic text-4xl md:text-5xl"
+            style={{ color: "var(--gold)" }}
+          >
             Thirty paintings, thirty stories.
           </h2>
           <p className="mt-5 text-muted-foreground">
-            Each work below appears on the wheel above. A brief note offers a way in —
-            the painter, the year, and the spark that made it endure.
+            Every work above appears below with a brief note — the painter, the year,
+            and the spark that made it endure.
           </p>
         </header>
 
@@ -55,12 +58,17 @@ function Index() {
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
               </div>
-              <div className="p-6">
-                <h3 className="font-serif text-xl leading-snug">{p.title}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {p.artist} · <span className="italic">{p.year}</span>
+              <div className="p-6 text-center">
+                <h3
+                  className="font-serif text-2xl"
+                  style={{ color: "var(--gold)" }}
+                >
+                  {p.title}
+                </h3>
+                <p className="mt-1 text-[0.7rem] tracking-[0.3em] uppercase text-muted-foreground">
+                  {p.artist} · {p.year}
                 </p>
-                <p className="mt-4 text-sm leading-relaxed text-foreground/80">
+                <p className="mt-4 italic font-serif text-base leading-relaxed text-foreground/80">
                   {p.description}
                 </p>
               </div>
