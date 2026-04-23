@@ -29,7 +29,7 @@ export const paintings: Painting[] = [
     year: "1801",
     description:
       "An idealized equestrian portrait of Napoleon Bonaparte leading his army through the Great St. Bernard Pass.",
-    image: wm("Jacques-Louis_David_-_Bonaparte_franchissant_le_Grand_Saint-Bernard%2C_20_mai_1800_-_Google_Art_Project.jpg"),
+    image: wm("f/fd/David_-_Napoleon_crossing_the_Alps_-_Malmaison2.jpg"),
   },
   {
     title: "Mona Lisa",
@@ -69,7 +69,7 @@ export const paintings: Painting[] = [
     year: "1890",
     description:
       "An academic portrait of a young woman admiring herself in the mirror, embodying Belle Époque elegance.",
-    image: wm("Auguste_Toulmouche_-_Vanity.jpg"),
+    image: wm("Auguste_toulmouche-vanity.jpg"),
   },
   {
     title: "The Starry Night",
@@ -157,7 +157,7 @@ export const paintings: Painting[] = [
     year: "1814",
     description:
       "An elongated reclining nude blending Neoclassical line with sensuous Orientalist fantasy.",
-    image: wm("Grande_Odalisque.jpg"),
+    image: wm("d/df/La_grande_odalisque_-_Jean-Auguste_Dominique_Ingres_-_Mus%C3%A9e_du_Louvre_Peintures_RF_1158.jpg"),
   },
   {
     title: "The Card Players",
@@ -165,7 +165,7 @@ export const paintings: Painting[] = [
     year: "1890–95",
     description:
       "A quiet scene of Provençal peasants at cards — a cornerstone of post-Impressionist composition.",
-    image: wm("Paul_C%C3%A9zanne%2C_Les_joueurs_de_carte_%281892-95%29.jpg"),
+    image: wm("6/69/Les_Joueurs_de_cartes%2C_par_Paul_C%C3%A9zanne.jpg"),
   },
   {
     title: "Bal du moulin de la Galette",
@@ -269,6 +269,6 @@ export const paintings: Painting[] = [
     year: "1767",
     description:
       "A frothy Rococo flirtation in a sunlit garden — silk, secrets and a daring kicked-off slipper.",
-    image: wm("Fragonard%2C_The_Swing.jpg"),
+    image: wm("8/83/The_Swing_%28P430%29.jpg"),
   },
 ];

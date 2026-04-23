@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import type { Painting } from "@/data/paintings";
-import { Lightbox } from "./Lightbox";
 
 type Props = { paintings: Painting[] };
 
 export function PaintingWheel({ paintings }: Props) {
-  const [zoomed, setZoomed] = useState<Painting | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const [progress, setProgress] = useState(0); // 0..1 within section
   const [vw, setVw] = useState(1200);
@@ -39,7 +37,7 @@ export function PaintingWheel({ paintings }: Props) {
   }, []);
 
   const N = paintings.length;
-  // Clockwise rotation as scroll progresses (positive degrees rotate clockwise in CSS).
+  // The wheel rotates clockwise as you scroll. One full turn over the pinned section.
   const rotation = progress * 360;
 
   // Wheel geometry
@@ -51,9 +49,9 @@ export function PaintingWheel({ paintings }: Props) {
   // Determine which painting sits closest to the top (12 o'clock) — that's the "focused" one.
   // Each tile is at angle (i * 360/N) + rotation. The tile at top has total angle ≡ 0 mod 360.
   const step = 360 / N;
-  // Tiles sit at angle (i*step - rotation) from 12 o'clock (clockwise wheel).
-  // We want i such that (i*step - rotation) mod 360 ≈ 0  => i ≈ (rotation/step) mod N
-  const focusedIndex = ((Math.round(rotation / step) % N) + N) % N;
+  // We want i such that (i*step + rotation) mod 360 ≈ 0  => i ≈ (-rotation/step) mod N
+  const focusedIndex =
+    ((Math.round(-rotation / step) % N) + N) % N;
   const focused = paintings[focusedIndex];
 
   return (
@@ -83,7 +81,7 @@ export function PaintingWheel({ paintings }: Props) {
             width: wheelDiameter,
             height: wheelDiameter,
             top: "44%",
-            transform: `translateX(-50%) rotate(${-rotation}deg)`,
+            transform: `translateX(-50%) rotate(${rotation}deg)`,
             willChange: "transform",
             transition: "transform 0.08s linear",
           }}
@@ -103,14 +101,16 @@ export function PaintingWheel({ paintings }: Props) {
                   top: "50%",
                   width: tileW,
                   height: tileH,
+                  // Card faces outward (radially), rotated by angle. Counter-rotate the wheel
+                  // rotation so the card itself stays readable when at the top, but here we want
+                  // the cards to fan with the wheel, like the reference — so we ONLY rotate by
+                  // the slot angle, not by -rotation.
                   transform: `translate(${x}px, ${y}px) translate(-50%, -50%) rotate(${angle}deg)`,
                   willChange: "transform",
                 }}
               >
-                <button
-                  type="button"
-                  onClick={() => setZoomed(p)}
-                  className="w-full h-full overflow-hidden bg-card ring-1 ring-black/10 cursor-pointer transition-transform hover:scale-105 block"
+                <div
+                  className="w-full h-full overflow-hidden bg-card ring-1 ring-black/10"
                   style={{
                     borderRadius: 14,
                     boxShadow:
@@ -122,9 +122,9 @@ export function PaintingWheel({ paintings }: Props) {
                     alt={p.title}
                     loading="lazy"
                     draggable={false}
-                    className="w-full h-full object-cover pointer-events-none"
+                    className="w-full h-full object-cover"
                   />
-                </button>
+                </div>
               </div>
             );
           })}
@@ -169,7 +169,6 @@ export function PaintingWheel({ paintings }: Props) {
           }
         `}</style>
       </div>
-      <Lightbox painting={zoomed} onClose={() => setZoomed(null)} />
     </section>
   );
 }
