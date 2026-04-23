@@ -29,7 +29,7 @@ export const paintings: Painting[] = [
     year: "1801",
     description:
       "An idealized equestrian portrait of Napoleon Bonaparte leading his army through the Great St. Bernard Pass.",
-    image: wm("8/89/Jacques-Louis_David_-_Bonaparte_franchissant_le_Grand_Saint-Bernard%2C_20_mai_1800_-_Google_Art_Project.jpg"),
+    image: wm("f/fd/David_-_Napoleon_crossing_the_Alps_-_Malmaison2.jpg"),
   },
   {
     title: "Mona Lisa",
