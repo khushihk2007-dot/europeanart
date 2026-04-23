@@ -80,7 +80,7 @@ export function PaintingWheel({ paintings }: Props) {
           style={{
             width: wheelDiameter,
             height: wheelDiameter,
-            top: "62%",
+            top: "44%",
             transform: `translateX(-50%) rotate(${rotation}deg)`,
             willChange: "transform",
             transition: "transform 0.08s linear",
