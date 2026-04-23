@@ -131,7 +131,7 @@ export function PaintingWheel({ paintings }: Props) {
         </div>
 
         {/* Focused painting info card */}
-        <div className="absolute inset-x-0 bottom-0 z-20 flex flex-col items-center pb-10 md:pb-14 px-6">
+        <div className="absolute inset-x-0 bottom-0 z-20 flex flex-col items-center pb-2 md:pb-4 px-6 -mb-2">
           <div
             key={focused.title}
             className="w-full max-w-2xl rounded-2xl bg-card/95 backdrop-blur px-8 py-7 text-center ring-1 ring-border"
