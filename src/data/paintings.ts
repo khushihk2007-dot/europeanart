@@ -6,10 +6,13 @@ export type Painting = {
   image: string;
 };
 
-// Image URLs from Wikimedia Commons (public domain).
-// Using thumbnail endpoints for fast loading.
-const wm = (file: string, w = 600) =>
-  `https://upload.wikimedia.org/wikipedia/commons/thumb/${file}/${w}px-${file.split("/").pop()}`;
+// Image URLs from Wikimedia Commons (public domain) via the hotlink-friendly
+// Special:FilePath endpoint, which 302->301->200 to the right thumbnail.
+// Pass the bare filename (last segment) — the helper handles encoding + width.
+const wm = (file: string, w = 800) => {
+  const filename = file.split("/").pop() ?? file;
+  return `https://commons.wikimedia.org/wiki/Special:FilePath/${filename}?width=${w}`;
+};
 
 export const paintings: Painting[] = [
   {
