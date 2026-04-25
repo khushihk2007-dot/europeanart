@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { Painting } from "@/data/paintings";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent } from "@/components/ui/dialog";
 
 type Props = { paintings: Painting[] };
 
@@ -170,7 +170,7 @@ export function PaintingWheel({ paintings }: Props) {
       </div>
 
       <Dialog open={!!zoomed} onOpenChange={(o) => !o && setZoomed(null)}>
-        <DialogContent className="max-w-5xl bg-transparent border-0 p-0 sm:rounded-none shadow-none [&>button]:fixed [&>button]:right-4 [&>button]:top-4 [&>button]:text-white [&>button]:z-[60]">
+        <DialogContent className="max-w-5xl bg-transparent border-0 p-0 sm:rounded-none shadow-none [&>button]:hidden">
           {zoomed && (
             <div className="flex items-center justify-center p-4 md:p-8">
               <img
@@ -182,6 +182,12 @@ export function PaintingWheel({ paintings }: Props) {
             </div>
           )}
         </DialogContent>
+        {zoomed && (
+          <DialogClose className="fixed right-4 top-4 z-[100] text-white opacity-90 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+            <span className="text-3xl leading-none" aria-hidden="true">×</span>
+            <span className="sr-only">Close</span>
+          </DialogClose>
+        )}
       </Dialog>
     </section>
   );
