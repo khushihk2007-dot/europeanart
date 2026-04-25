@@ -166,6 +166,15 @@ export function PaintingWheel({ paintings }: Props) {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
           }
+          @keyframes paintingZoomIn {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.05); filter: blur(4px); }
+            60% { opacity: 1; filter: blur(0); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); filter: blur(0); }
+          }
+          @keyframes paintingZoomOut {
+            from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            to { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+          }
         `}</style>
       </div>
 
