@@ -40,7 +40,8 @@ export function PaintingWheel({ paintings }: Props) {
 
   const N = paintings.length;
   // The wheel rotates clockwise as you scroll. One full turn over the pinned section.
-  const rotation = progress * 360;
+  // Negative rotation = clockwise visual movement as you scroll down.
+  const rotation = -progress * 360;
 
   // Wheel geometry
   const wheelDiameter = Math.max(vw * 1.9, 1700);
@@ -48,12 +49,9 @@ export function PaintingWheel({ paintings }: Props) {
   const tileW = Math.max(140, Math.min(230, vw * 0.14));
   const tileH = tileW * 1.55;
 
-  // Determine which painting sits closest to the top (12 o'clock) — that's the "focused" one.
-  // Each tile is at angle (i * 360/N) + rotation. The tile at top has total angle ≡ 0 mod 360.
+  // Determine which painting sits closest to the top (12 o'clock).
   const step = 360 / N;
-  // We want i such that (i*step + rotation) mod 360 ≈ 0  => i ≈ (-rotation/step) mod N
-  const focusedIndex =
-    ((Math.round(-rotation / step) % N) + N) % N;
+  const focusedIndex = ((Math.round(-rotation / step) % N) + N) % N;
   const focused = paintings[focusedIndex];
 
   return (
