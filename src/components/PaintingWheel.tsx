@@ -170,7 +170,7 @@ export function PaintingWheel({ paintings }: Props) {
       </div>
 
       <Dialog open={!!zoomed} onOpenChange={(o) => !o && setZoomed(null)}>
-        <DialogContent className="max-w-5xl bg-transparent border-0 p-0 sm:rounded-none shadow-none">
+        <DialogContent className="max-w-5xl bg-transparent border-0 p-0 sm:rounded-none shadow-none [&>button]:fixed [&>button]:right-4 [&>button]:top-4 [&>button]:text-white [&>button]:z-[60]">
           {zoomed && (
             <div className="flex items-center justify-center p-4 md:p-8">
               <img
