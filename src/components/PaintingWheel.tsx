@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { Painting } from "@/data/paintings";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import goldenFrame from "@/assets/golden-frame.png";
 
 type Props = { paintings: Painting[] };
 
@@ -174,29 +175,33 @@ export function PaintingWheel({ paintings }: Props) {
           {zoomed && (
             <div className="flex flex-col items-center p-4 md:p-8">
               <div
-                className="relative p-3 md:p-5"
+                className="relative w-full"
                 style={{
-                  background:
-                    "linear-gradient(135deg, #d4af37 0%, #f5d97a 25%, #b8860b 50%, #f5d97a 75%, #d4af37 100%)",
-                  borderRadius: 8,
-                  boxShadow:
-                    "0 0 0 2px #8b6914 inset, 0 30px 80px -20px rgba(0,0,0,0.7), 0 0 60px rgba(212,175,55,0.35)",
+                  maxWidth: "min(900px, 90vw)",
+                  aspectRatio: "3 / 2",
+                  filter:
+                    "drop-shadow(0 30px 60px rgba(0,0,0,0.6)) drop-shadow(0 0 40px rgba(212,175,55,0.3))",
                 }}
               >
-                <div
-                  className="p-2 md:p-3"
+                {/* Painting sits in the frame's inner opening (~12% inset) */}
+                <img
+                  src={zoomed.image}
+                  alt={zoomed.title}
+                  className="absolute object-cover"
                   style={{
-                    background:
-                      "linear-gradient(135deg, #8b6914 0%, #d4af37 50%, #8b6914 100%)",
+                    top: "11%",
+                    left: "11%",
+                    width: "78%",
+                    height: "78%",
                   }}
-                >
-                  <img
-                    src={zoomed.image}
-                    alt={zoomed.title}
-                    className="block max-h-[70vh] max-w-full w-auto h-auto object-contain bg-black"
-                    style={{ boxShadow: "0 0 0 1px rgba(0,0,0,0.6) inset" }}
-                  />
-                </div>
+                />
+                {/* Golden frame overlay */}
+                <img
+                  src={goldenFrame}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 w-full h-full pointer-events-none select-none"
+                />
               </div>
               <div className="mt-6 text-center max-w-2xl">
                 <h3
