@@ -173,31 +173,11 @@ export function PaintingWheel({ paintings }: Props) {
         <DialogContent className="max-w-5xl bg-background border-0 p-0 sm:rounded-none shadow-none">
           {zoomed && (
             <div className="flex flex-col items-center p-4 md:p-8">
-              <div
-                className="relative p-3 md:p-5"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #d4af37 0%, #f5d97a 25%, #b8860b 50%, #f5d97a 75%, #d4af37 100%)",
-                  borderRadius: 8,
-                  boxShadow:
-                    "0 0 0 2px #8b6914 inset, 0 30px 80px -20px rgba(0,0,0,0.7), 0 0 60px rgba(212,175,55,0.35)",
-                }}
-              >
-                <div
-                  className="p-2 md:p-3"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #8b6914 0%, #d4af37 50%, #8b6914 100%)",
-                  }}
-                >
-                  <img
-                    src={zoomed.image}
-                    alt={zoomed.title}
-                    className="block max-h-[70vh] max-w-full w-auto h-auto object-contain bg-black"
-                    style={{ boxShadow: "0 0 0 1px rgba(0,0,0,0.6) inset" }}
-                  />
-                </div>
-              </div>
+              <img
+                src={zoomed.image}
+                alt={zoomed.title}
+                className="block max-h-[70vh] max-w-full w-auto h-auto object-contain"
+              />
               <div className="mt-6 text-center max-w-2xl">
                 <h3
                   className="font-serif italic text-3xl md:text-4xl"
