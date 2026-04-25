@@ -172,26 +172,12 @@ export function PaintingWheel({ paintings }: Props) {
       <Dialog open={!!zoomed} onOpenChange={(o) => !o && setZoomed(null)}>
         <DialogContent className="max-w-5xl bg-background border-0 p-0 sm:rounded-none shadow-none">
           {zoomed && (
-            <div className="flex flex-col items-center p-4 md:p-8">
+            <div className="flex items-center justify-center p-4 md:p-8">
               <img
                 src={zoomed.image}
                 alt={zoomed.title}
-                className="block max-h-[70vh] max-w-full w-auto h-auto object-contain"
+                className="block max-h-[85vh] max-w-full w-auto h-auto object-contain"
               />
-              <div className="mt-6 text-center max-w-2xl">
-                <h3
-                  className="font-serif italic text-3xl md:text-4xl"
-                  style={{ color: "var(--gold)" }}
-                >
-                  {zoomed.title}
-                </h3>
-                <p className="mt-1 text-xs md:text-sm tracking-[0.3em] uppercase text-muted-foreground">
-                  {zoomed.artist} · {zoomed.year}
-                </p>
-                <p className="mt-3 italic font-serif text-foreground/80 text-base md:text-lg leading-snug">
-                  {zoomed.description}
-                </p>
-              </div>
             </div>
           )}
         </DialogContent>
