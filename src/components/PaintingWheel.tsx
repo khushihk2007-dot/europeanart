@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { Painting } from "@/data/paintings";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 type Props = { paintings: Painting[] };
 
@@ -7,6 +8,7 @@ export function PaintingWheel({ paintings }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const [progress, setProgress] = useState(0); // 0..1 within section
   const [vw, setVw] = useState(1200);
+  const [zoomed, setZoomed] = useState<Painting | null>(null);
 
   useEffect(() => {
     const onResize = () => setVw(window.innerWidth);
