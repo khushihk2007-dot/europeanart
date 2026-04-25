@@ -101,30 +101,29 @@ export function PaintingWheel({ paintings }: Props) {
                   top: "50%",
                   width: tileW,
                   height: tileH,
-                  // Card faces outward (radially), rotated by angle. Counter-rotate the wheel
-                  // rotation so the card itself stays readable when at the top, but here we want
-                  // the cards to fan with the wheel, like the reference — so we ONLY rotate by
-                  // the slot angle, not by -rotation.
                   transform: `translate(${x}px, ${y}px) translate(-50%, -50%) rotate(${angle}deg)`,
                   willChange: "transform",
                 }}
               >
-                <div
-                  className="w-full h-full overflow-hidden bg-card ring-1 ring-black/10"
+                <button
+                  type="button"
+                  onClick={() => setZoomed(p)}
+                  className="block w-full h-full overflow-hidden bg-card ring-1 ring-black/10 cursor-pointer transition-transform hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--gold)]"
                   style={{
                     borderRadius: 14,
                     boxShadow:
                       "0 30px 60px -25px rgba(0,0,0,0.45), 0 10px 25px -10px rgba(0,0,0,0.25)",
                   }}
+                  aria-label={`View ${p.title}`}
                 >
                   <img
                     src={p.image}
                     alt={p.title}
                     loading="lazy"
                     draggable={false}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover pointer-events-none"
                   />
-                </div>
+                </button>
               </div>
             );
           })}
