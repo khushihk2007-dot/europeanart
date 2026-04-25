@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { Painting } from "@/data/paintings";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 type Props = { paintings: Painting[] };
 
@@ -7,6 +8,7 @@ export function PaintingWheel({ paintings }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const [progress, setProgress] = useState(0); // 0..1 within section
   const [vw, setVw] = useState(1200);
+  const [zoomed, setZoomed] = useState<Painting | null>(null);
 
   useEffect(() => {
     const onResize = () => setVw(window.innerWidth);
@@ -38,7 +40,8 @@ export function PaintingWheel({ paintings }: Props) {
 
   const N = paintings.length;
   // The wheel rotates clockwise as you scroll. One full turn over the pinned section.
-  const rotation = progress * 360;
+  // Negative rotation = clockwise visual movement as you scroll down.
+  const rotation = -progress * 360;
 
   // Wheel geometry
   const wheelDiameter = Math.max(vw * 1.9, 1700);
@@ -46,12 +49,9 @@ export function PaintingWheel({ paintings }: Props) {
   const tileW = Math.max(140, Math.min(230, vw * 0.14));
   const tileH = tileW * 1.55;
 
-  // Determine which painting sits closest to the top (12 o'clock) — that's the "focused" one.
-  // Each tile is at angle (i * 360/N) + rotation. The tile at top has total angle ≡ 0 mod 360.
+  // Determine which painting sits closest to the top (12 o'clock).
   const step = 360 / N;
-  // We want i such that (i*step + rotation) mod 360 ≈ 0  => i ≈ (-rotation/step) mod N
-  const focusedIndex =
-    ((Math.round(-rotation / step) % N) + N) % N;
+  const focusedIndex = ((Math.round(-rotation / step) % N) + N) % N;
   const focused = paintings[focusedIndex];
 
   return (
@@ -101,30 +101,29 @@ export function PaintingWheel({ paintings }: Props) {
                   top: "50%",
                   width: tileW,
                   height: tileH,
-                  // Card faces outward (radially), rotated by angle. Counter-rotate the wheel
-                  // rotation so the card itself stays readable when at the top, but here we want
-                  // the cards to fan with the wheel, like the reference — so we ONLY rotate by
-                  // the slot angle, not by -rotation.
                   transform: `translate(${x}px, ${y}px) translate(-50%, -50%) rotate(${angle}deg)`,
                   willChange: "transform",
                 }}
               >
-                <div
-                  className="w-full h-full overflow-hidden bg-card ring-1 ring-black/10"
+                <button
+                  type="button"
+                  onClick={() => setZoomed(p)}
+                  className="block w-full h-full overflow-hidden bg-card ring-1 ring-black/10 cursor-pointer transition-transform hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--gold)]"
                   style={{
                     borderRadius: 14,
                     boxShadow:
                       "0 30px 60px -25px rgba(0,0,0,0.45), 0 10px 25px -10px rgba(0,0,0,0.25)",
                   }}
+                  aria-label={`View ${p.title}`}
                 >
                   <img
                     src={p.image}
                     alt={p.title}
                     loading="lazy"
                     draggable={false}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover pointer-events-none"
                   />
-                </div>
+                </button>
               </div>
             );
           })}
@@ -169,6 +168,54 @@ export function PaintingWheel({ paintings }: Props) {
           }
         `}</style>
       </div>
+
+      <Dialog open={!!zoomed} onOpenChange={(o) => !o && setZoomed(null)}>
+        <DialogContent className="max-w-5xl bg-background border-0 p-0 sm:rounded-none shadow-none">
+          {zoomed && (
+            <div className="flex flex-col items-center p-4 md:p-8">
+              <div
+                className="relative p-3 md:p-5"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #d4af37 0%, #f5d97a 25%, #b8860b 50%, #f5d97a 75%, #d4af37 100%)",
+                  borderRadius: 8,
+                  boxShadow:
+                    "0 0 0 2px #8b6914 inset, 0 30px 80px -20px rgba(0,0,0,0.7), 0 0 60px rgba(212,175,55,0.35)",
+                }}
+              >
+                <div
+                  className="p-2 md:p-3"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #8b6914 0%, #d4af37 50%, #8b6914 100%)",
+                  }}
+                >
+                  <img
+                    src={zoomed.image}
+                    alt={zoomed.title}
+                    className="block max-h-[70vh] max-w-full w-auto h-auto object-contain bg-black"
+                    style={{ boxShadow: "0 0 0 1px rgba(0,0,0,0.6) inset" }}
+                  />
+                </div>
+              </div>
+              <div className="mt-6 text-center max-w-2xl">
+                <h3
+                  className="font-serif italic text-3xl md:text-4xl"
+                  style={{ color: "var(--gold)" }}
+                >
+                  {zoomed.title}
+                </h3>
+                <p className="mt-1 text-xs md:text-sm tracking-[0.3em] uppercase text-muted-foreground">
+                  {zoomed.artist} · {zoomed.year}
+                </p>
+                <p className="mt-3 italic font-serif text-foreground/80 text-base md:text-lg leading-snug">
+                  {zoomed.description}
+                </p>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
