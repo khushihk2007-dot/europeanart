@@ -166,23 +166,11 @@ export function PaintingWheel({ paintings }: Props) {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
           }
-          @keyframes paintingZoomIn {
-            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.05); filter: blur(4px); }
-            60% { opacity: 1; filter: blur(0); }
-            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); filter: blur(0); }
-          }
-          @keyframes paintingZoomOut {
-            from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            to { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
-          }
         `}</style>
       </div>
 
       <Dialog open={!!zoomed} onOpenChange={(o) => !o && setZoomed(null)}>
-        <DialogContent
-          className="max-w-5xl bg-background border-0 p-0 sm:rounded-none shadow-none data-[state=open]:animate-[paintingZoomIn_0.55s_cubic-bezier(0.22,1,0.36,1)] data-[state=closed]:animate-[paintingZoomOut_0.3s_ease-in]"
-          style={{ transformOrigin: "center center" }}
-        >
+        <DialogContent className="max-w-5xl bg-background border-0 p-0 sm:rounded-none shadow-none">
           {zoomed && (
             <div className="flex flex-col items-center p-4 md:p-8">
               <div
@@ -210,7 +198,7 @@ export function PaintingWheel({ paintings }: Props) {
                   />
                 </div>
               </div>
-              <div className="mt-6 text-center max-w-2xl animate-[fadeUp_0.5s_ease-out_0.25s_both]">
+              <div className="mt-6 text-center max-w-2xl">
                 <h3
                   className="font-serif italic text-3xl md:text-4xl"
                   style={{ color: "var(--gold)" }}
