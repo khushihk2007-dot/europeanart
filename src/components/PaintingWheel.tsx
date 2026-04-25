@@ -168,6 +168,54 @@ export function PaintingWheel({ paintings }: Props) {
           }
         `}</style>
       </div>
+
+      <Dialog open={!!zoomed} onOpenChange={(o) => !o && setZoomed(null)}>
+        <DialogContent className="max-w-5xl bg-background border-0 p-0 sm:rounded-none shadow-none">
+          {zoomed && (
+            <div className="flex flex-col items-center p-4 md:p-8">
+              <div
+                className="relative p-3 md:p-5"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #d4af37 0%, #f5d97a 25%, #b8860b 50%, #f5d97a 75%, #d4af37 100%)",
+                  borderRadius: 8,
+                  boxShadow:
+                    "0 0 0 2px #8b6914 inset, 0 30px 80px -20px rgba(0,0,0,0.7), 0 0 60px rgba(212,175,55,0.35)",
+                }}
+              >
+                <div
+                  className="p-2 md:p-3"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #8b6914 0%, #d4af37 50%, #8b6914 100%)",
+                  }}
+                >
+                  <img
+                    src={zoomed.image}
+                    alt={zoomed.title}
+                    className="block max-h-[70vh] max-w-full w-auto h-auto object-contain bg-black"
+                    style={{ boxShadow: "0 0 0 1px rgba(0,0,0,0.6) inset" }}
+                  />
+                </div>
+              </div>
+              <div className="mt-6 text-center max-w-2xl">
+                <h3
+                  className="font-serif italic text-3xl md:text-4xl"
+                  style={{ color: "var(--gold)" }}
+                >
+                  {zoomed.title}
+                </h3>
+                <p className="mt-1 text-xs md:text-sm tracking-[0.3em] uppercase text-muted-foreground">
+                  {zoomed.artist} · {zoomed.year}
+                </p>
+                <p className="mt-3 italic font-serif text-foreground/80 text-base md:text-lg leading-snug">
+                  {zoomed.description}
+                </p>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
