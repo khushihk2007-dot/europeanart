@@ -3,260 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Échos de l'Art — A Journey Through European Masterpieces</title>
-  <meta name="description" content="Scroll through a rotating wheel of 30+ legendary European paintings, with notes on each work and its painter." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <title>Art Wheel Gallery</title>
+  <meta name="description" content="Explore European masterpieces in a dynamic, scroll-driven wheel." />
   <style>
-    :root {
-      --background: #faf8f5;
-      --foreground: #2d2d2d;
-      --card: #ffffff;
-      --muted-foreground: #6b6b6b;
-      --gold: #c9a84c;
-      --border: #e5e0d8;
-      --font-serif: "Cormorant Garamond", "Playfair Display", Georgia, serif;
-      --font-sans: "Inter", system-ui, sans-serif;
-    }
-
-    * {
+    body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: var(--font-sans);
-      background: var(--background);
-      color: var(--foreground);
-      -webkit-font-smoothing: antialiased;
-      min-height: 100vh;
-    }
-
-    h1, h2, h3, h4 {
-      font-family: var(--font-serif);
-      letter-spacing: -0.01em;
-    }
-
-    .hero {
-      text-align: center;
-      padding: 3rem 1rem 2rem;
-    }
-
-    .hero h1 {
-      font-style: italic;
-      font-size: clamp(2.5rem, 6vw, 4.5rem);
-      color: var(--gold);
-    }
-
-    .hero p {
-      margin-top: 0.5rem;
-      font-size: 0.75rem;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: var(--muted-foreground);
-    }
-
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1.5rem;
-      padding: 2rem 1.5rem 4rem;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .card {
-      background: var(--card);
-      border-radius: 14px;
-      overflow: hidden;
-      box-shadow: 0 30px 60px -25px rgba(0,0,0,0.12), 0 10px 25px -10px rgba(0,0,0,0.08);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      cursor: pointer;
-    }
-
-    .card:hover {
-      transform: translateY(-4px) scale(1.01);
-      box-shadow: 0 35px 70px -25px rgba(0,0,0,0.18), 0 15px 30px -10px rgba(0,0,0,0.12);
-    }
-
-    .card img {
-      width: 100%;
-      height: 320px;
-      object-fit: cover;
-      display: block;
-    }
-
-    .card-body {
-      padding: 1.25rem 1.5rem 1.5rem;
-    }
-
-    .card-body h2 {
-      font-size: 1.35rem;
-      color: var(--gold);
-      line-height: 1.2;
-    }
-
-    .card-body .meta {
-      margin-top: 0.4rem;
-      font-size: 0.7rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--muted-foreground);
-    }
-
-    .card-body .desc {
-      margin-top: 0.75rem;
-      font-family: var(--font-serif);
-      font-style: italic;
-      font-size: 1rem;
-      line-height: 1.45;
-      color: var(--foreground);
-      opacity: 0.85;
-    }
-
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.92);
-      display: none;
+      background: #0a0a0a;
+      color: #e5e5e5;
+      font-family: 'Inter', system-ui, sans-serif;
+      display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 50;
-      padding: 2rem;
-    }
-
-    .lightbox.active {
-      display: flex;
-    }
-
-    .lightbox img {
-      max-height: 85vh;
-      max-width: 100%;
-      object-fit: contain;
-      border-radius: 8px;
-      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6);
-    }
-
-    .lightbox .close {
-      position: fixed;
-      top: 1rem;
-      right: 1.5rem;
-      font-size: 2.5rem;
-      color: #fff;
-      cursor: pointer;
-      z-index: 60;
-      opacity: 0.9;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.6);
-      background: none;
-      border: none;
-      line-height: 1;
-    }
-
-    .lightbox .close:hover {
-      opacity: 1;
-    }
-
-    footer {
+      min-height: 100vh;
       text-align: center;
-      padding: 2rem 1rem 3rem;
-      font-size: 0.75rem;
-      color: var(--muted-foreground);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
+    }
+    a {
+      color: #c9a84c;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <div class="hero">
-    <h1>Échos de l'Art</h1>
-    <p>A Journey Through European Masterpieces</p>
-  </div>
-
-  <main class="gallery" id="gallery"></main>
-
-  <div class="lightbox" id="lightbox">
-    <button class="close" onclick="closeLightbox()">×</button>
-    <img id="lightbox-img" src="" alt="" />
-  </div>
-
-  <footer>Art Wheel Gallery · European Masterpieces</footer>
-
-  <script>
-    const paintings = [
-      { title: "The Creation of Adam", artist: "Michelangelo", year: "c. 1512", description: "A fresco on the Sistine Chapel ceiling depicting God breathing life into Adam through the touch of a finger.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Michelangelo_-_Creation_of_Adam_(cropped).jpg?width=800" },
-      { title: "Napoleon Crossing the Alps", artist: "Jacques-Louis David", year: "1801", description: "An idealized equestrian portrait of Napoleon Bonaparte leading his army through the Great St. Bernard Pass.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/David_-_Napoleon_crossing_the_Alps_-_Malmaison2.jpg?width=800" },
-      { title: "Mona Lisa", artist: "Leonardo da Vinci", year: "c. 1503", description: "The world's most famous portrait, celebrated for its enigmatic smile and pioneering sfumato technique.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Mona_Lisa,_by_Leonardo_da_Vinci,_from_C2RMF_retouched.jpg?width=800" },
-      { title: "Ophelia", artist: "John Everett Millais", year: "1851–52", description: "A Pre-Raphaelite masterpiece showing Hamlet's Ophelia singing as she drowns in a flower-strewn brook.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/John_Everett_Millais_-_Ophelia_-_Google_Art_Project.jpg?width=800" },
-      { title: "Girl with a Pearl Earring", artist: "Johannes Vermeer", year: "c. 1665", description: "A luminous tronie of a girl in exotic dress, often called the 'Mona Lisa of the North'.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/1665_Girl_with_a_Pearl_Earring.jpg?width=800" },
-      { title: "The Kiss", artist: "Gustav Klimt", year: "1907–08", description: "A gilded Symbolist icon of two lovers entwined, painted during Klimt's celebrated Golden Period.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/The_Kiss_-_Gustav_Klimt_-_Google_Cultural_Institute.jpg?width=800" },
-      { title: "Vanity", artist: "Auguste Toulmouche", year: "1890", description: "An academic portrait of a young woman admiring herself in the mirror, embodying Belle Époque elegance.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Auguste_toulmouche-vanity.jpg?width=800" },
-      { title: "The Starry Night", artist: "Vincent van Gogh", year: "1889", description: "A swirling night sky over a Provençal village, painted from Van Gogh's asylum window in Saint-Rémy.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg?width=800" },
-      { title: "The Birth of Venus", artist: "Sandro Botticelli", year: "c. 1485", description: "The Roman goddess Venus arrives on the shore of Cyprus, born of sea foam — a Renaissance triumph.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg?width=800" },
-      { title: "Liberty Leading the People", artist: "Eugène Delacroix", year: "1830", description: "An allegory of the July Revolution with Liberty personified raising the tricolour over the barricades.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Eugène_Delacroix_-_Le_28_Juillet._La_Liberté_guidant_le_peuple.jpg?width=800" },
-      { title: "Impression, Sunrise", artist: "Claude Monet", year: "1872", description: "The hazy harbour of Le Havre at dawn — the painting that gave the Impressionist movement its name.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Monet_-_Impression,_Sunrise.jpg?width=800" },
-      { title: "The Luncheon of the Boating Party", artist: "Pierre-Auguste Renoir", year: "1880–81", description: "A sunlit gathering of Renoir's friends on a Seine-side balcony, brimming with conviviality and light.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Pierre-Auguste_Renoir_-_Luncheon_of_the_Boating_Party_-_Google_Art_Project.jpg?width=800" },
-      { title: "A Sunday on La Grande Jatte", artist: "Georges Seurat", year: "1884–86", description: "Parisians at leisure rendered in millions of dots — the masterpiece of Pointillism.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/A_Sunday_on_La_Grande_Jatte,_Georges_Seurat,_1884.jpg?width=800" },
-      { title: "Olympia", artist: "Édouard Manet", year: "1863", description: "A confronting modern nude that scandalised the Paris Salon and helped birth modern art.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Edouard_Manet_-_Olympia_-_Google_Art_Project_3.jpg?width=800" },
-      { title: "The Gleaners", artist: "Jean-François Millet", year: "1857", description: "Three peasant women gathering leftover grain — a dignified Realist tribute to rural labour.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Jean-François_Millet_-_Gleaners_-_Google_Art_Project_2.jpg?width=800" },
-      { title: "The Raft of the Medusa", artist: "Théodore Géricault", year: "1818–19", description: "A monumental Romantic canvas dramatising the harrowing aftermath of a French naval shipwreck.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/JEAN_LOUIS_THÉODORE_GÉRICAULT_-_La_Balsa_de_la_Medusa_(Museo_del_Louvre,_1818-19).jpg?width=800" },
-      { title: "The Death of Marat", artist: "Jacques-Louis David", year: "1793", description: "A solemn neoclassical portrait of the murdered revolutionary, painted as political martyrdom.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Death_of_Marat_by_David.jpg?width=800" },
-      { title: "The Grande Odalisque", artist: "Jean-Auguste-Dominique Ingres", year: "1814", description: "An elongated reclining nude blending Neoclassical line with sensuous Orientalist fantasy.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/La_grande_odalisque_-_Jean-Auguste_Dominique_Ingres_-_Musée_du_Louvre_Peintures_RF_1158.jpg?width=800" },
-      { title: "The Card Players", artist: "Paul Cézanne", year: "1890–95", description: "A quiet scene of Provençal peasants at cards — a cornerstone of post-Impressionist composition.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Les_Joueurs_de_cartes,_par_Paul_Cézanne.jpg?width=800" },
-      { title: "Bal du moulin de la Galette", artist: "Pierre-Auguste Renoir", year: "1876", description: "Dappled Sunday light falls on Parisians dancing at a Montmartre open-air café.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Pierre-Auguste_Renoir,_Le_Moulin_de_la_Galette.jpg?width=800" },
-      { title: "The School of Athens", artist: "Raphael", year: "1509–11", description: "A grand Vatican fresco gathering the great philosophers of antiquity beneath classical arches.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/"The_School_of_Athens"_by_Raffaello_Sanzio_da_Urbino.jpg?width=800" },
-      { title: "Las Meninas", artist: "Diego Velázquez", year: "1656", description: "A dazzling court scene that plays with reflection, gaze, and the role of the painter himself.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Las_Meninas,_by_Diego_Velázquez,_from_Prado_in_Google_Earth.jpg?width=800" },
-      { title: "The Night Watch", artist: "Rembrandt van Rijn", year: "1642", description: "A Dutch militia bursts into theatrical motion — Rembrandt's masterwork of light and group portraiture.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/The_Night_Watch_-_HD.jpg?width=800" },
-      { title: "The Garden of Earthly Delights", artist: "Hieronymus Bosch", year: "c. 1500", description: "A surreal triptych voyaging from Eden through a teeming earthly paradise into a nightmarish hell.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/The_Garden_of_earthly_delights.jpg?width=800" },
-      { title: "The Hay Wain", artist: "John Constable", year: "1821", description: "A quintessentially English river scene that helped shape modern landscape painting.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/John_Constable_The_Hay_Wain.jpg?width=800" },
-      { title: "The Fighting Temeraire", artist: "J. M. W. Turner", year: "1839", description: "A storied warship is towed to its breaking yard at sunset — a Romantic elegy for an era's end.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Turner,_J._M._W._-_The_Fighting_Téméraire_tugged_to_her_last_Berth_to_be_broken.jpg?width=800" },
-      { title: "Wanderer above the Sea of Fog", artist: "Caspar David Friedrich", year: "1818", description: "A lone figure surveys a misty alpine vista — the defining image of German Romanticism.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Caspar_David_Friedrich_-_Wanderer_above_the_sea_of_fog.jpg?width=800" },
-      { title: "Primavera", artist: "Sandro Botticelli", year: "c. 1480", description: "An allegory of spring populated by mythological figures dancing in a flowering grove.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Botticelli-primavera.jpg?width=800" },
-      { title: "The Lady of Shalott", artist: "John William Waterhouse", year: "1888", description: "A Pre-Raphaelite vision of Tennyson's doomed lady drifting toward Camelot.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/John_William_Waterhouse_-_The_Lady_of_Shalott_-_Google_Art_Project_edit.jpg?width=800" },
-      { title: "The Third of May 1808", artist: "Francisco Goya", year: "1814", description: "A searing protest against the brutality of Napoleonic troops executing Spanish civilians.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/El_Tres_de_Mayo,_by_Francisco_de_Goya,_from_Prado_thin_black_margin.jpg?width=800" },
-      { title: "Café Terrace at Night", artist: "Vincent van Gogh", year: "1888", description: "Gaslit warmth spills onto the cobbles of a starlit Arles square in vivid yellows and blues.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/Vincent_Willem_van_Gogh_-_Cafe_Terrace_at_Night_(Yorck).jpg?width=800" },
-      { title: "The Swing", artist: "Jean-Honoré Fragonard", year: "1767", description: "A frothy Rococo flirtation in a sunlit garden — silk, secrets and a daring kicked-off slipper.", image: "https://commons.wikimedia.org/wiki/Special:FilePath/The_Swing_(P430).jpg?width=800" }
-    ];
-
-    const gallery = document.getElementById('gallery');
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-
-    paintings.forEach(p => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <img src="${p.image}" alt="${p.title}" loading="lazy" />
-        <div class="card-body">
-          <h2>${p.title}</h2>
-          <div class="meta">${p.artist} · ${p.year}</div>
-          <p class="desc">${p.description}</p>
-        </div>
-      `;
-      card.onclick = () => openLightbox(p.image, p.title);
-      gallery.appendChild(card);
-    });
-
-    function openLightbox(src, alt) {
-      lightboxImg.src = src;
-      lightboxImg.alt = alt;
-      lightbox.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeLightbox() {
-      lightbox.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    lightbox.addEventListener('click', (e) => {
-      if (e.target === lightbox) closeLightbox();
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeLightbox();
-    });
-  </script>
+  <p>Redirecting to <a href="https://artwheel-gallery.lovable.app/">Art Wheel Gallery</a>...</p>
 </body>
 </html>
